@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Table1>
+    <NameBase>203</NameBase>
+    <Time>26.09.2019 07:08:34</Time>
+    <Delta>00:00:00</Delta>
+  </Table1>
+  <Table1>
+    <NameBase>201</NameBase>
+    <Time>26.09.2019 07:08:43</Time>
+    <Delta>00:00:09</Delta>
+  </Table1>
+  <Table1>
+    <NameBase>202</NameBase>
+    <Time>26.09.2019 07:08:43</Time>
+    <Delta>00:00:00</Delta>
+  </Table1>
+</NewDataSet>
