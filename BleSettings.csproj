@@ -102,5 +102,14 @@
   <ItemGroup>
     <None Include="ok.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bat20.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bat50.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bat80.bmp" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -186,7 +186,8 @@ namespace BLE_setup
         public ulong uBleAddr;
         public bool bIsActive;
         public bool bIsTime;
-        public bool bIsAkk;
+        public uint uAkk;
+        public bool bIsAlarm;
     }
 
     public struct stCommand
@@ -981,7 +982,7 @@ namespace BLE_setup
                             if (bIsBase) mbd.type = MyTypeBleDevice.BASE;
                             if (bIsTag) mbd.type = MyTypeBleDevice.TAG;
 
-                            
+
                             if (bIsBase)
                             {
                                 var dataSections = args.Advertisement.DataSections;
@@ -1001,14 +1002,21 @@ namespace BLE_setup
                                 if (IndexOf(data, patternS) >= 0) istartLen = IndexOf(data, patternS) + 6;
 
                                 Int32 baseTime = 0;
+                                byte byteStatus = 0;
                                 if (istartLen > 0)
                                 {
                                     baseTime = BitConverter.ToInt32(data, istartLen);
+                                    if (data.Length > istartLen + 4)
+                                        byteStatus = data[istartLen + 4];
                                 }
 
-                                Int32 unixTimestampNow = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                                Int32 unixTimestampNow = (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
                                 if (Math.Abs(baseTime - unixTimestampNow) < 10) mbd.bIsTime = true;
+
+
+                                if ((byteStatus & (1 << 2)) > 0) mbd.bIsAlarm = true;
+                                mbd.uAkk = (uint)byteStatus & 0x03;
 
                                 //string DataString;
                                 //if (data.Length > 9)
@@ -1017,7 +1025,7 @@ namespace BLE_setup
                                 //}
                             }
 
-                            mbd.bIsAkk = true;
+                            
 
                             BleList.GetOrAdd(device.DeviceId, mbd);
                             RefreshList();

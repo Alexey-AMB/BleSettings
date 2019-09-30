@@ -200,9 +200,8 @@ namespace BleSettings
             Form_progress fp = null;
             if (currSelectedRow.Count > 1)
             {
-                fp = new Form_progress(currSelectedRow.Count);
-                fp.Location = this.Location;
-                fp.Show();
+                fp = new Form_progress(currSelectedRow.Count);                
+                fp.ShowDialog();
             }
             foreach (DataGridViewRow r in currSelectedRow)
             {
@@ -358,6 +357,12 @@ namespace BleSettings
             imageColBatt.ImageLayout = DataGridViewImageCellLayout.Stretch;
             imageColBatt.Width = 40;
             dataGridView1.Columns.Add(imageColBatt);
+
+            DataGridViewImageColumn imageColAlarm = new DataGridViewImageColumn();
+            imageColAlarm.HeaderText = "Авт";
+            imageColAlarm.ImageLayout = DataGridViewImageCellLayout.Stretch;
+            imageColAlarm.Width = 40;
+            dataGridView1.Columns.Add(imageColAlarm);
         }
 
         private void WaitCurrComm()
@@ -367,7 +372,7 @@ namespace BleSettings
             {
                 Thread.Sleep(50);
                 iCount++;
-                if (iCount > 60) break;
+                if (iCount > 40) break;
             }
         }
 
@@ -390,7 +395,13 @@ namespace BleSettings
 
                 if (mbd.bIsTime) row1.Cells.Add(new DataGridViewImageCell { Value = new Bitmap(Properties.Resources.ok) });
                 else row1.Cells.Add(new DataGridViewTextBoxCell { Value = "" });
-                if (mbd.bIsAkk) row1.Cells.Add(new DataGridViewImageCell { Value = new Bitmap(Properties.Resources.ok) });
+
+                if (mbd.uAkk == 3)      row1.Cells.Add(new DataGridViewImageCell { Value = new Bitmap(Properties.Resources.bat80) });
+                else if (mbd.uAkk == 2) row1.Cells.Add(new DataGridViewImageCell { Value = new Bitmap(Properties.Resources.bat50) });
+                else if (mbd.uAkk == 1) row1.Cells.Add(new DataGridViewImageCell { Value = new Bitmap(Properties.Resources.bat20) });
+                else if (mbd.uAkk == 0) row1.Cells.Add(new DataGridViewTextBoxCell { Value = "" });
+
+                if (mbd.bIsAlarm) row1.Cells.Add(new DataGridViewImageCell { Value = new Bitmap(Properties.Resources.ok) });
                 else row1.Cells.Add(new DataGridViewTextBoxCell { Value = "" });
 
                 dataGridView1.Rows.Add(row1);
@@ -610,7 +621,8 @@ namespace BleSettings
         }
 
         private async void Button_Base_TimeSet_Click(object sender, EventArgs e)
-        {        if (currSelectedRow == null) return;
+        {
+            if (currSelectedRow == null) return;
             if (currSelectedRow.Count == 0) return;
 
             DisableButtons(false);
@@ -631,7 +643,7 @@ namespace BleSettings
                 {
                     BLE_com.cCmdNext = (byte)InCommandBase.CMD_NEXT;
 
-                    Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                    Int32 unixTimestamp = (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                     byte[] buf = BitConverter.GetBytes(unixTimestamp);
 
                     SendCommand(InCommandBase.CMD_SET_TIME, buf);
@@ -661,6 +673,12 @@ namespace BleSettings
 
         private void Button_baseRunSetTime_Click(object sender, EventArgs e)
         {
+            if(this.dateTimePickerRunStart.Value > this.dateTimePickerRunStop.Value)
+            {
+                MessageBox.Show("Время включения должно быть меньше, чем время выключения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             Int32 unixTimestart = (Int32)(dateTimePickerRunStart.Value.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             Int32 unixTimestop = (Int32)(dateTimePickerRunStop.Value.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
@@ -672,7 +690,7 @@ namespace BleSettings
             Buffer.BlockCopy(bufstart, 0, buf, 0, 4);
             Buffer.BlockCopy(bufstop, 0, buf, 4, 4);
 
-            ButtonCommandSend(InCommandBase.CMD_SET_TIMES_RUN, buf, false);
+            ButtonCommandSend(InCommandBase.CMD_SET_TIMES_RUN, buf, true);
         }
 
         private void Button_Base_KM_Click(object sender, EventArgs e)
@@ -829,6 +847,31 @@ namespace BleSettings
 
         }
 
+        private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (((BaseWorkType)this.comboBoxTypeBase.SelectedItem).Name)
+            {
+                case "Стартовая":
+                    this.numericUpDownNumBase.Value = 240;
+                    break;
+
+                case "Финишная":
+                    this.numericUpDownNumBase.Value = 245;
+                    break;
+
+                case "Очистка":
+                    this.numericUpDownNumBase.Value = 249;
+                    break;
+
+                case "Проверочная":
+                    this.numericUpDownNumBase.Value = 248;
+                    break;
+
+                case "Обычная":
+                    this.numericUpDownNumBase.Value = 1;
+                    break;
+            }
+        }
 
         #endregion
         //========================================================================
@@ -1151,8 +1194,7 @@ namespace BleSettings
         {
             this.panel_settingsTag.Enabled = false;
         }
-
-        
+               
 
         #endregion
         //========================================================================

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label_status = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button_showTag = new System.Windows.Forms.Button();
@@ -41,7 +42,6 @@
             this.button_Tag_Settings = new System.Windows.Forms.Button();
             this.button_Tag_Sleep = new System.Windows.Forms.Button();
             this.panel_buttonBase = new System.Windows.Forms.Panel();
-            this.label_status = new System.Windows.Forms.Label();
             this.button_Base_KM = new System.Windows.Forms.Button();
             this.button_Base_SetAlarm = new System.Windows.Forms.Button();
             this.button_Base_TimeSet = new System.Windows.Forms.Button();
@@ -87,6 +87,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.panel_contaktBase = new System.Windows.Forms.Panel();
+            this.button_saveKMresult = new System.Windows.Forms.Button();
             this.button_closeKMcard = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.labelKmNumber = new System.Windows.Forms.Label();
@@ -98,15 +99,23 @@
             this.button_writeKMcardNum = new System.Windows.Forms.Button();
             this.button_clearKMcard = new System.Windows.Forms.Button();
             this.panel_resultTag = new System.Windows.Forms.Panel();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.buttonSaveTagResult = new System.Windows.Forms.Button();
+            this.button_closeResultTag = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.buttonZabegNext = new System.Windows.Forms.Button();
             this.buttonZabegPrev = new System.Windows.Forms.Button();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.labelNumZabeg = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.button_closeResultTag = new System.Windows.Forms.Button();
             this.panel_settingsTag = new System.Windows.Forms.Panel();
+            this.label_battTag = new System.Windows.Forms.Label();
+            this.label_nameTag = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label_versTag = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label_MACTag = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
             this.buttonCancelSettingsTag = new System.Windows.Forms.Button();
             this.buttonSaveSettingsTag = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -129,15 +138,6 @@
             this.label28 = new System.Windows.Forms.Label();
             this.textBoxNameTag = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
-            this.label_battTag = new System.Windows.Forms.Label();
-            this.label_nameTag = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.label_versTag = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label_MACTag = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
-            this.button_saveKMresult = new System.Windows.Forms.Button();
             this.panel_start = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -176,9 +176,18 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(250, 604);
+            this.groupBox1.Size = new System.Drawing.Size(290, 604);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // label_status
+            // 
+            this.label_status.AutoSize = true;
+            this.label_status.Location = new System.Drawing.Point(249, 583);
+            this.label_status.Name = "label_status";
+            this.label_status.Size = new System.Drawing.Size(35, 13);
+            this.label_status.TabIndex = 7;
+            this.label_status.Text = "status";
             // 
             // dataGridView1
             // 
@@ -196,7 +205,7 @@
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(244, 512);
+            this.dataGridView1.Size = new System.Drawing.Size(284, 512);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DataGridView1_MouseClick);
             // 
@@ -207,13 +216,13 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(3, 16);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(244, 73);
+            this.panel2.Size = new System.Drawing.Size(284, 73);
             this.panel2.TabIndex = 0;
             // 
             // button_showTag
             // 
             this.button_showTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_showTag.Location = new System.Drawing.Point(130, 17);
+            this.button_showTag.Location = new System.Drawing.Point(155, 17);
             this.button_showTag.Name = "button_showTag";
             this.button_showTag.Size = new System.Drawing.Size(111, 42);
             this.button_showTag.TabIndex = 1;
@@ -225,7 +234,7 @@
             // 
             this.button_showBase.BackColor = System.Drawing.Color.Lime;
             this.button_showBase.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_showBase.Location = new System.Drawing.Point(3, 17);
+            this.button_showBase.Location = new System.Drawing.Point(18, 17);
             this.button_showBase.Name = "button_showBase";
             this.button_showBase.Size = new System.Drawing.Size(111, 42);
             this.button_showBase.TabIndex = 0;
@@ -238,7 +247,7 @@
             this.groupBox2.Controls.Add(this.panel_buttonTag);
             this.groupBox2.Controls.Add(this.panel_buttonBase);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.groupBox2.Location = new System.Drawing.Point(250, 0);
+            this.groupBox2.Location = new System.Drawing.Point(290, 0);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(200, 604);
             this.groupBox2.TabIndex = 1;
@@ -324,15 +333,6 @@
             this.panel_buttonBase.Name = "panel_buttonBase";
             this.panel_buttonBase.Size = new System.Drawing.Size(188, 582);
             this.panel_buttonBase.TabIndex = 3;
-            // 
-            // label_status
-            // 
-            this.label_status.AutoSize = true;
-            this.label_status.Location = new System.Drawing.Point(153, 683);
-            this.label_status.Name = "label_status";
-            this.label_status.Size = new System.Drawing.Size(35, 13);
-            this.label_status.TabIndex = 7;
-            this.label_status.Text = "status";
             // 
             // button_Base_KM
             // 
@@ -523,7 +523,7 @@
             this.panel_settingsBase.Controls.Add(this.label3);
             this.panel_settingsBase.Controls.Add(this.label2);
             this.panel_settingsBase.Enabled = false;
-            this.panel_settingsBase.Location = new System.Drawing.Point(674, 424);
+            this.panel_settingsBase.Location = new System.Drawing.Point(651, 456);
             this.panel_settingsBase.Name = "panel_settingsBase";
             this.panel_settingsBase.Size = new System.Drawing.Size(600, 600);
             this.panel_settingsBase.TabIndex = 2;
@@ -687,6 +687,7 @@
             this.comboBoxTypeBase.Name = "comboBoxTypeBase";
             this.comboBoxTypeBase.Size = new System.Drawing.Size(149, 33);
             this.comboBoxTypeBase.TabIndex = 32;
+            this.comboBoxTypeBase.SelectedIndexChanged += new System.EventHandler(this.comboBoxType_SelectedIndexChanged);
             // 
             // buttonCancelBaseSettings
             // 
@@ -875,6 +876,17 @@
             this.panel_contaktBase.Size = new System.Drawing.Size(600, 600);
             this.panel_contaktBase.TabIndex = 4;
             // 
+            // button_saveKMresult
+            // 
+            this.button_saveKMresult.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_saveKMresult.Location = new System.Drawing.Point(28, 527);
+            this.button_saveKMresult.Name = "button_saveKMresult";
+            this.button_saveKMresult.Size = new System.Drawing.Size(150, 40);
+            this.button_saveKMresult.TabIndex = 7;
+            this.button_saveKMresult.Text = "Сохранить";
+            this.button_saveKMresult.UseVisualStyleBackColor = true;
+            this.button_saveKMresult.Click += new System.EventHandler(this.Button_saveKMresult_Click);
+            // 
             // button_closeKMcard
             // 
             this.button_closeKMcard.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1014,6 +1026,29 @@
             this.panel_resultTag.Size = new System.Drawing.Size(600, 600);
             this.panel_resultTag.TabIndex = 5;
             // 
+            // buttonSaveTagResult
+            // 
+            this.buttonSaveTagResult.Enabled = false;
+            this.buttonSaveTagResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonSaveTagResult.Location = new System.Drawing.Point(30, 530);
+            this.buttonSaveTagResult.Name = "buttonSaveTagResult";
+            this.buttonSaveTagResult.Size = new System.Drawing.Size(150, 40);
+            this.buttonSaveTagResult.TabIndex = 5;
+            this.buttonSaveTagResult.Text = "Сохранить";
+            this.buttonSaveTagResult.UseVisualStyleBackColor = true;
+            this.buttonSaveTagResult.Click += new System.EventHandler(this.ButtonSaveTagResult_Click);
+            // 
+            // button_closeResultTag
+            // 
+            this.button_closeResultTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_closeResultTag.Location = new System.Drawing.Point(424, 531);
+            this.button_closeResultTag.Name = "button_closeResultTag";
+            this.button_closeResultTag.Size = new System.Drawing.Size(150, 39);
+            this.button_closeResultTag.TabIndex = 29;
+            this.button_closeResultTag.Text = "Закрыть";
+            this.button_closeResultTag.UseVisualStyleBackColor = true;
+            this.button_closeResultTag.Click += new System.EventHandler(this.Button_closeResultTag_Click);
+            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.buttonZabegNext);
@@ -1027,18 +1062,6 @@
             this.groupBox5.TabIndex = 28;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Результаты";
-            // 
-            // buttonSaveTagResult
-            // 
-            this.buttonSaveTagResult.Enabled = false;
-            this.buttonSaveTagResult.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonSaveTagResult.Location = new System.Drawing.Point(30, 530);
-            this.buttonSaveTagResult.Name = "buttonSaveTagResult";
-            this.buttonSaveTagResult.Size = new System.Drawing.Size(150, 40);
-            this.buttonSaveTagResult.TabIndex = 5;
-            this.buttonSaveTagResult.Text = "Сохранить";
-            this.buttonSaveTagResult.UseVisualStyleBackColor = true;
-            this.buttonSaveTagResult.Click += new System.EventHandler(this.ButtonSaveTagResult_Click);
             // 
             // buttonZabegNext
             // 
@@ -1100,17 +1123,6 @@
             this.label20.TabIndex = 0;
             this.label20.Text = "Забег №";
             // 
-            // button_closeResultTag
-            // 
-            this.button_closeResultTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_closeResultTag.Location = new System.Drawing.Point(424, 531);
-            this.button_closeResultTag.Name = "button_closeResultTag";
-            this.button_closeResultTag.Size = new System.Drawing.Size(150, 39);
-            this.button_closeResultTag.TabIndex = 29;
-            this.button_closeResultTag.Text = "Закрыть";
-            this.button_closeResultTag.UseVisualStyleBackColor = true;
-            this.button_closeResultTag.Click += new System.EventHandler(this.Button_closeResultTag_Click);
-            // 
             // panel_settingsTag
             // 
             this.panel_settingsTag.Controls.Add(this.label_battTag);
@@ -1136,6 +1148,86 @@
             this.panel_settingsTag.Name = "panel_settingsTag";
             this.panel_settingsTag.Size = new System.Drawing.Size(600, 600);
             this.panel_settingsTag.TabIndex = 6;
+            // 
+            // label_battTag
+            // 
+            this.label_battTag.AutoSize = true;
+            this.label_battTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_battTag.Location = new System.Drawing.Point(271, 33);
+            this.label_battTag.Name = "label_battTag";
+            this.label_battTag.Size = new System.Drawing.Size(51, 20);
+            this.label_battTag.TabIndex = 29;
+            this.label_battTag.Text = "label5";
+            // 
+            // label_nameTag
+            // 
+            this.label_nameTag.AutoSize = true;
+            this.label_nameTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_nameTag.Location = new System.Drawing.Point(68, 13);
+            this.label_nameTag.Name = "label_nameTag";
+            this.label_nameTag.Size = new System.Drawing.Size(51, 20);
+            this.label_nameTag.TabIndex = 26;
+            this.label_nameTag.Text = "label5";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label32.Location = new System.Drawing.Point(196, 37);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(63, 16);
+            this.label32.TabIndex = 25;
+            this.label32.Text = "Батарея";
+            // 
+            // label_versTag
+            // 
+            this.label_versTag.AutoSize = true;
+            this.label_versTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_versTag.Location = new System.Drawing.Point(271, 13);
+            this.label_versTag.Name = "label_versTag";
+            this.label_versTag.Size = new System.Drawing.Size(51, 20);
+            this.label_versTag.TabIndex = 28;
+            this.label_versTag.Text = "label5";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label34.Location = new System.Drawing.Point(22, 17);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(34, 16);
+            this.label34.TabIndex = 22;
+            this.label34.Text = "Имя";
+            // 
+            // label_MACTag
+            // 
+            this.label_MACTag.AutoSize = true;
+            this.label_MACTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_MACTag.Location = new System.Drawing.Point(68, 33);
+            this.label_MACTag.Name = "label_MACTag";
+            this.label_MACTag.Size = new System.Drawing.Size(51, 20);
+            this.label_MACTag.TabIndex = 27;
+            this.label_MACTag.Text = "label5";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label36.Location = new System.Drawing.Point(204, 18);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(55, 16);
+            this.label36.TabIndex = 24;
+            this.label36.Text = "Версия";
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label37.Location = new System.Drawing.Point(19, 37);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(37, 16);
+            this.label37.TabIndex = 23;
+            this.label37.Text = "MAC";
             // 
             // buttonCancelSettingsTag
             // 
@@ -1403,97 +1495,6 @@
             this.label29.TabIndex = 11;
             this.label29.Text = "Имя метки";
             // 
-            // label_battTag
-            // 
-            this.label_battTag.AutoSize = true;
-            this.label_battTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label_battTag.Location = new System.Drawing.Point(271, 33);
-            this.label_battTag.Name = "label_battTag";
-            this.label_battTag.Size = new System.Drawing.Size(51, 20);
-            this.label_battTag.TabIndex = 29;
-            this.label_battTag.Text = "label5";
-            // 
-            // label_nameTag
-            // 
-            this.label_nameTag.AutoSize = true;
-            this.label_nameTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label_nameTag.Location = new System.Drawing.Point(68, 13);
-            this.label_nameTag.Name = "label_nameTag";
-            this.label_nameTag.Size = new System.Drawing.Size(51, 20);
-            this.label_nameTag.TabIndex = 26;
-            this.label_nameTag.Text = "label5";
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label32.Location = new System.Drawing.Point(196, 37);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(63, 16);
-            this.label32.TabIndex = 25;
-            this.label32.Text = "Батарея";
-            // 
-            // label_versTag
-            // 
-            this.label_versTag.AutoSize = true;
-            this.label_versTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label_versTag.Location = new System.Drawing.Point(271, 13);
-            this.label_versTag.Name = "label_versTag";
-            this.label_versTag.Size = new System.Drawing.Size(51, 20);
-            this.label_versTag.TabIndex = 28;
-            this.label_versTag.Text = "label5";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label34.Location = new System.Drawing.Point(22, 17);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(34, 16);
-            this.label34.TabIndex = 22;
-            this.label34.Text = "Имя";
-            // 
-            // label_MACTag
-            // 
-            this.label_MACTag.AutoSize = true;
-            this.label_MACTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label_MACTag.Location = new System.Drawing.Point(68, 33);
-            this.label_MACTag.Name = "label_MACTag";
-            this.label_MACTag.Size = new System.Drawing.Size(51, 20);
-            this.label_MACTag.TabIndex = 27;
-            this.label_MACTag.Text = "label5";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label36.Location = new System.Drawing.Point(204, 18);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(55, 16);
-            this.label36.TabIndex = 24;
-            this.label36.Text = "Версия";
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label37.Location = new System.Drawing.Point(19, 37);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(37, 16);
-            this.label37.TabIndex = 23;
-            this.label37.Text = "MAC";
-            // 
-            // button_saveKMresult
-            // 
-            this.button_saveKMresult.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_saveKMresult.Location = new System.Drawing.Point(28, 527);
-            this.button_saveKMresult.Name = "button_saveKMresult";
-            this.button_saveKMresult.Size = new System.Drawing.Size(150, 40);
-            this.button_saveKMresult.TabIndex = 7;
-            this.button_saveKMresult.Text = "Сохранить";
-            this.button_saveKMresult.UseVisualStyleBackColor = true;
-            this.button_saveKMresult.Click += new System.EventHandler(this.Button_saveKMresult_Click);
-            // 
             // panel_start
             // 
             this.panel_start.Location = new System.Drawing.Point(1038, 33);
@@ -1505,7 +1506,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1056, 604);
+            this.ClientSize = new System.Drawing.Size(1096, 604);
             this.Controls.Add(this.panel_resultTag);
             this.Controls.Add(this.panel_start);
             this.Controls.Add(this.panel_settingsTag);
@@ -1515,6 +1516,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form_main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Настройка баз и меток";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_main_FormClosing);
             this.Load += new System.EventHandler(this.Form_main_Load);
@@ -1668,7 +1670,7 @@
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Button button_saveKMresult;
-        private System.Windows.Forms.Panel panel_start;
+        private System.Windows.Forms.Panel panel_start;        
     }
 }
 
