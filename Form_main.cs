@@ -118,7 +118,7 @@ namespace BleSettings
             
         }
 
-        private async void SendCommand(InCommandBase cmd, byte[] databuf)
+        private void SendCommand(InCommandBase cmd, byte[] databuf)
         {
             iCurrCommand = (byte)cmd;
             if (databuf != null)
@@ -134,7 +134,7 @@ namespace BleSettings
             }
         }
 
-        private async void SendCommand(InCommandTag cmd, byte[] databuf)
+        private void SendCommand(InCommandTag cmd, byte[] databuf)
         {
             iCurrCommand = (byte)cmd;
             if (databuf != null)
@@ -200,8 +200,9 @@ namespace BleSettings
             Form_progress fp = null;
             if (currSelectedRow.Count > 1)
             {
-                fp = new Form_progress(currSelectedRow.Count);                
-                fp.ShowDialog();
+                fp = new Form_progress(currSelectedRow.Count);
+                fp.Location = this.Location;
+                fp.Show();
             }
             foreach (DataGridViewRow r in currSelectedRow)
             {
@@ -499,7 +500,7 @@ namespace BleSettings
 
             //
             DataSet ds = new DataSet();
-            DataTable dt;
+            //DataTable dt;
             DataRow dr;
             DataColumn Numbase;
             DataColumn TimeBase;
@@ -561,8 +562,26 @@ namespace BleSettings
                 //Блок не читается
                 this.dataGridView2.Visible = false;
             }
-            this.labelKmNumber.Text = "Карта № " + res[0].ToString();
-            //EnableButtonsZabeg(true);
+            this.labelKmNumber.Text = "Карта № " + res[0].ToString();            
+        }
+
+        private void ExportDgvToXML(DataTable dt, string sFileName)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "XML|*.xml";
+            sfd.FileName = sFileName;
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    dt.WriteXml(sfd.FileName);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
         }
 
         //========================================================================
@@ -844,7 +863,9 @@ namespace BleSettings
 
         private void Button_saveKMresult_Click(object sender, EventArgs e)
         {
-
+            string s = "";
+            s = this.labelKmNumber.Text.Trim();
+            ExportDgvToXML(dt, s);
         }
 
         private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)
@@ -985,7 +1006,9 @@ namespace BleSettings
 
         private void ButtonSaveTagResult_Click(object sender, EventArgs e)
         {
-            ExportDgvToXML(dt);
+            string s = "";
+            if(curr_mbd != null) s = curr_mbd.sBleMacAddr + "_" + curr_mbd.sName.Trim(' ') + "_Забег_" + (nblk[0]-1).ToString();
+            ExportDgvToXML(dt, s);
         }
 
         private void EnableButtonsZabeg(bool b)
@@ -1025,24 +1048,6 @@ namespace BleSettings
             DisableButtons(true);
         }
         
-        private void ExportDgvToXML(DataTable dt)
-        {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "XML|*.xml";
-            sfd.FileName = curr_mbd.sBleMacAddr + "_" + curr_mbd.sName.Trim(' ') + "_Забег_" + nblk[0].ToString();
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    dt.WriteXml(sfd.FileName);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
-        }
-
         private void ShowTagResult(byte[] res)
         {
             int iIndex = 0;
@@ -1115,7 +1120,7 @@ namespace BleSettings
                 //Блок не читается
                 this.dataGridView3.Visible = false;
             }
-            this.labelNumZabeg.Text = nblk[0].ToString();
+            this.labelNumZabeg.Text = (nblk[0]-1).ToString();
             EnableButtonsZabeg(true);
         }
 
@@ -1194,8 +1199,7 @@ namespace BleSettings
         {
             this.panel_settingsTag.Enabled = false;
         }
-               
-
+        
         #endregion
         //========================================================================
 

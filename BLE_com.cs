@@ -199,7 +199,7 @@ namespace BLE_setup
     }
 
     public static class BLE_com
-    {        
+    {
         public static object oLock = new object();
         public const int SizeStCommand = 5;
 
@@ -234,7 +234,7 @@ namespace BLE_setup
 
         public delegate void HaveUpdateList();
         public static event HaveUpdateList RefreshList;
-                
+
         //==================================================================
 
         private static BluetoothLEDevice _selectedDevice = null;
@@ -316,6 +316,7 @@ namespace BLE_setup
 
         private static async void Unsubscribe()
         {
+            //if (_subscribers == null) return;
             foreach (var sub in _subscribers)
             {
                 try
@@ -328,7 +329,7 @@ namespace BLE_setup
             _subscribers.Clear();
         }
 
-        private static async void Characteristic_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+        private static void Characteristic_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
             var newValue = FormatValue(args.CharacteristicValue, DataFormat.Hex);
 
@@ -339,7 +340,7 @@ namespace BLE_setup
             //}), null);
 
             CryptographicBuffer.CopyToByteArray(args.CharacteristicValue, out byte[] data);
-             GetBuffer(data);
+            GetBuffer(data);
         }
 
         async static Task<int> SetService(string serviceName)
@@ -418,40 +419,40 @@ namespace BLE_setup
             return retVal;
         }
 
-        async static Task<int> WriteCharacteristic(string param, int iCa)
-        {
-            int retVal = 0;
-            if (_selectedDevice != null)
-            {
-                if (!string.IsNullOrEmpty(param))
-                {
-                    if (_characteristics.Count < iCa) return 1;
-                    var attr = _characteristics[iCa];
+        //async static Task<int> WriteCharacteristic(string param, int iCa)
+        //{
+        //    int retVal = 0;
+        //    if (_selectedDevice != null)
+        //    {
+        //        if (!string.IsNullOrEmpty(param))
+        //        {
+        //            if (_characteristics.Count < iCa) return 1;
+        //            var attr = _characteristics[iCa];
 
-                    var buffer = FormatData(param, DataFormat.Hex);
+        //            var buffer = FormatData(param, DataFormat.Hex);
 
-                    if (attr != null && attr.characteristic != null)
-                    {
-                        // Write data to characteristic
-                        GattWriteResult result = await attr.characteristic.WriteValueWithResultAsync(buffer);
-                        if (result.Status != GattCommunicationStatus.Success)
-                        {
-                            retVal += 1;
-                        }
-                    }
-                    else
-                    {
-                        retVal += 1;
-                    }
+        //            if (attr != null && attr.characteristic != null)
+        //            {
+        //                // Write data to characteristic
+        //                GattWriteResult result = await attr.characteristic.WriteValueWithResultAsync(buffer);
+        //                if (result.Status != GattCommunicationStatus.Success)
+        //                {
+        //                    retVal += 1;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                retVal += 1;
+        //            }
 
-                }
-            }
-            else
-            {
-                retVal += 1;
-            }
-            return retVal;
-        }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        retVal += 1;
+        //    }
+        //    return retVal;
+        //}
 
         async static Task<int> WriteCharacteristic(IBuffer buffer, int iCa)
         {
@@ -627,7 +628,7 @@ namespace BLE_setup
                         { //если данные не влезли в один буфер
                             Array.Copy(buf, SizeStCommand, pBuffIn, 0, buf.Length - SizeStCommand);
                             iRecivedLen = buf.Length - SizeStCommand;
-                             SendCommand(cCmdNext, false);
+                            SendCommand(cCmdNext, false);
                             return;
                         }
                     }
@@ -647,7 +648,7 @@ namespace BLE_setup
                 {
                     Array.Copy(buf, 0, pBuffIn, iRecivedLen, buf.Length);
                     iRecivedLen += buf.Length;
-                     SendCommand(cCmdNext, false);
+                    SendCommand(cCmdNext, false);
                     return;
                 }
                 else
@@ -683,12 +684,12 @@ namespace BLE_setup
             byte crc = 0;
             for (int i = 0; i < len; i++)
             {
-                crc += (byte) buf[i];
+                crc += (byte)buf[i];
             }
 
             return (byte)crc;
         }
-        
+
         public static /*async Task*/ void SendCommand(byte cmd, bool bHaveBuf)
         {
             stCommand cmdOut;
@@ -719,10 +720,10 @@ namespace BLE_setup
                 }
 
                 buf = new byte[len];
-                                                
+
                 Array.Copy(GetBytes(cmdOut), buf, SizeStCommand);
                 if ((bHaveBuf) && (pBuffOut != null)) Array.Copy(pBuffOut, 0, buf, SizeStCommand, len - SizeStCommand);
-                 WriteToBle(buf);
+                WriteToBle(buf);
                 buf = null;
                 if ((iSendedLen == 0) && (bHaveBuf)) //передача закончена
                 {
@@ -745,28 +746,28 @@ namespace BLE_setup
                 buf = new byte[len];
 
                 if ((bHaveBuf) && (pBuffOut != null)) Array.Copy(pBuffOut, iSendedLen, buf, 0, len);
-                 WriteToBle(buf);
-                
+                WriteToBle(buf);
+
                 iSendedLen += len;
                 if (iSendedLen == iBuffOutLen) //передача закончена
-                {                    
+                {
                     pBuffOut = null;
                     iSendedLen = 0;
                 }
             }
-            
+
         }
 
-        private static async void ExecuteCommand(bool bHaveBuf)
+        private static void ExecuteCommand(bool bHaveBuf)
         {
             switch (iCurrCmd)
             {
                 case ((int)OutAsk.ASK_NEXT):
-                     SendCommand((byte)InCommandBase.CMD_NONE, true);
+                    SendCommand((byte)InCommandBase.CMD_NONE, true);
                     return;
-                    //break;
+                //break;
                 case ((int)OutAsk.ASK_OK):
-                    if(BuffChaged != null) BuffChaged(pBuffIn);
+                    if (BuffChaged != null) BuffChaged(pBuffIn);
                     break;
                 case ((int)OutAsk.ASK_ERROR):
                     BuffError();
@@ -818,32 +819,32 @@ namespace BLE_setup
             return arr;
         }
 
-        public static async Task WriteToBleOneShot(string sSelID, byte[] bytes)
-        {
-            string sSelServ = "Custom Service: f000ba33-0451-4000-b000-000000000000";
-            var writer = new DataWriter();
-            writer.ByteOrder = ByteOrder.LittleEndian;
-            writer.WriteBytes(bytes);
+        //public static async Task WriteToBleOneShot(string sSelID, byte[] bytes)
+        //{
+        //    string sSelServ = "Custom Service: f000ba33-0451-4000-b000-000000000000";
+        //    var writer = new DataWriter();
+        //    writer.ByteOrder = ByteOrder.LittleEndian;
+        //    writer.WriteBytes(bytes);
 
-            try
-            {
-                await OpenDevice(sSelID);
+        //    try
+        //    {
+        //        await OpenDevice(sSelID);
 
-                await SetService(sSelServ);
+        //        await SetService(sSelServ);
 
-                await SubscribeToCharacteristic(0);
+        //        await SubscribeToCharacteristic(0);
 
-                await WriteCharacteristic(writer.DetachBuffer(), 1);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка соединения. " + ex.Message);
-            }
-            finally
-            {
-                CloseDevice();
-            }
-        }
+        //        await WriteCharacteristic(writer.DetachBuffer(), 1);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Ошибка соединения. " + ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        CloseDevice();
+        //    }
+        //}
 
         public static async Task<bool> OpenBle(string sSelID, MyTypeBleDevice type)
         {
@@ -861,7 +862,8 @@ namespace BLE_setup
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка соединения. " + ex.Message);
+                MessageBox.Show("Ошибка соединения. \r\n" + "Устройство не найдено, обновите список устройств. \r\n\r\n\r\n" +
+                                "Подробно: " + ex.Message, "Ошибка соединения", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 CloseDevice();
                 bRet = false;
             }
@@ -896,7 +898,7 @@ namespace BLE_setup
         {
             CloseDevice();
         }
-        
+
         public static void StartDiscoveryAdv()
         {
             _watcher = new BluetoothLEAdvertisementWatcher();
@@ -950,7 +952,7 @@ namespace BLE_setup
             _watcher.Stopped -= _watcher_Stopped;
             _watcher = null;
         }
-                
+
         private static async void _watcher_Received(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementReceivedEventArgs args)
         {
             bool bIsBase = false;
@@ -1025,15 +1027,15 @@ namespace BLE_setup
                                 //}
                             }
 
-                            
+
 
                             BleList.GetOrAdd(device.DeviceId, mbd);
                             RefreshList();
                         }
-                    }                    
+                    }
                 }
             }
-            catch (Exception ex)
+            catch// (Exception ex)
             { }
 
             finally
