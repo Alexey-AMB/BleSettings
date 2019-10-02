@@ -46,11 +46,11 @@ namespace BleSettings
         }
 
         private void Form_main_Load(object sender, EventArgs e)
-        {            
-            BLE_com.StartDiscoveryAdv();
+        {                        
             BLE_com.RefreshList += BLE_com_RefreshList;
             BLE_com.BuffChaged += BLE_com_BuffChanged;
             BLE_com.BuffError += BLE_com_BuffError;
+            BLE_com.StartDiscoveryAdv();
 
             lock (BLE_com.oLock)
             {
@@ -62,7 +62,6 @@ namespace BleSettings
         
         private void Form_main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //this.timer1.Enabled = false;
             BLE_com.StopDiscoveryAdv();
             BLE_com.RefreshList -= BLE_com_RefreshList;
             BLE_com.BuffChaged -= BLE_com_BuffChanged;
@@ -77,9 +76,11 @@ namespace BleSettings
             dataGridView1.Rows.Clear();
             lock (BLE_com.oLock)
             {
+                //BLE_com.StopDiscoveryAdv();
                 BLE_com.bBaseFound = true;
                 BLE_com.bTagFound = false;
                 BLE_com.BleList.Clear();
+                //BLE_com.StartDiscoveryAdv();
             }
             this.panel_buttonBase.BringToFront();
         }
@@ -381,11 +382,8 @@ namespace BleSettings
         {
             dataGridView1.Rows.Clear();
 
-            foreach (string dd in BLE_com.BleList.Keys)
+            foreach (stMyBleDevice mbd in BLE_com.BleList.Values)
             {
-
-                stMyBleDevice mbd = BLE_com.BleList[dd];
-
                 var row1 = new DataGridViewRow();
                 //row1.Cells.Add(new DataGridViewImageCell { Value = new Bitmap("CHECK.ICO") });
                 DataGridViewTextBoxCell celsName = new DataGridViewTextBoxCell();

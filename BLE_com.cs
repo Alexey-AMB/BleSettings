@@ -219,7 +219,7 @@ namespace BLE_setup
         public const byte SIGNATURE_COMMAND = 223;
         private const byte MYDATATRANSFER_MYBUFIN1_LEN = 23;
 
-        public static ConcurrentDictionary<string, stMyBleDevice> BleList = new ConcurrentDictionary<string, stMyBleDevice>();
+        public static ConcurrentDictionary<ulong, stMyBleDevice> BleList = new ConcurrentDictionary<ulong, stMyBleDevice>();
         public static bool bBaseFound = true;
         public static bool bTagFound = true;
 
@@ -961,77 +961,81 @@ namespace BLE_setup
 
             try
             {
+                if (BleList.ContainsKey((ulong)args.BluetoothAddress)) return;
+
                 device = await BluetoothLEDevice.FromBluetoothAddressAsync(args.BluetoothAddress);
                 if (device == null) return;
 
                 foreach (var s in args.Advertisement.ServiceUuids)
                 {
-                    if (s.ToString() == "0000ba33-0000-1000-8000-00805f9b34fb") bIsBase = true;
-                    if (s.ToString() == "0000ba43-0000-1000-8000-00805f9b34fb") bIsTag = true;
+                    if (s.ToString() == "0000ba33-0000-1000-8000-00805f9b34fb")
+                    {
+                        bIsBase = true;
+                        break;
+                    }
+                    if (s.ToString() == "0000ba43-0000-1000-8000-00805f9b34fb")
+                    {
+                        bIsTag = true;
+                        break;
+                    }
                 }
 
-                if ((bIsBase && bBaseFound) || (bIsTag && bTagFound))
+                lock (BLE_com.oLock)
                 {
-                    lock (oLock)
+                    if ((bIsBase && bBaseFound) || (bIsTag && bTagFound))
                     {
-                        if (!BleList.ContainsKey(device.DeviceId))
+                        stMyBleDevice mbd = new stMyBleDevice();
+                        mbd.sName = device.Name;
+                        mbd.sBleMacAddr = device.BluetoothAddress.ToString("X12");
+                        mbd.sBleId = device.DeviceId;
+                        mbd.uBleAddr = device.BluetoothAddress;
+                        if (bIsBase) mbd.type = MyTypeBleDevice.BASE;
+                        if (bIsTag) mbd.type = MyTypeBleDevice.TAG;
+
+                        if (bIsBase)
                         {
-                            stMyBleDevice mbd = new stMyBleDevice();
-                            mbd.sName = device.Name;
-                            mbd.sBleMacAddr = device.BluetoothAddress.ToString("X12");
-                            mbd.sBleId = device.DeviceId;
-                            mbd.uBleAddr = device.BluetoothAddress;
-                            if (bIsBase) mbd.type = MyTypeBleDevice.BASE;
-                            if (bIsTag) mbd.type = MyTypeBleDevice.TAG;
-
-
-                            if (bIsBase)
+                            var dataSections = args.Advertisement.DataSections;
+                            var sectionData = dataSections[2];
+                            byte[] data = new byte[sectionData.Data.Length];
+                            using (var reader = DataReader.FromBuffer(sectionData.Data))
                             {
-                                var dataSections = args.Advertisement.DataSections;
-                                var sectionData = dataSections[2];
-                                byte[] data = new byte[sectionData.Data.Length];
-                                using (var reader = DataReader.FromBuffer(sectionData.Data))
-                                {
-                                    reader.ReadBytes(data);
-                                }
-
-                                byte[] patternA = new byte[3] { Convert.ToByte('A'), Convert.ToByte('S'), Convert.ToByte('E') };
-                                byte[] patternS = new byte[3] { Convert.ToByte('a'), Convert.ToByte('s'), Convert.ToByte('e') };
-                                if (IndexOf(data, patternA) >= 0) mbd.bIsActive = true;
-
-                                int istartLen = -1;
-                                if (IndexOf(data, patternA) >= 0) istartLen = IndexOf(data, patternA) + 6;
-                                if (IndexOf(data, patternS) >= 0) istartLen = IndexOf(data, patternS) + 6;
-
-                                Int32 baseTime = 0;
-                                byte byteStatus = 0;
-                                if (istartLen > 0)
-                                {
-                                    baseTime = BitConverter.ToInt32(data, istartLen);
-                                    if (data.Length > istartLen + 4)
-                                        byteStatus = data[istartLen + 4];
-                                }
-
-                                Int32 unixTimestampNow = (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-
-                                if (Math.Abs(baseTime - unixTimestampNow) < 10) mbd.bIsTime = true;
-
-
-                                if ((byteStatus & (1 << 2)) > 0) mbd.bIsAlarm = true;
-                                mbd.uAkk = (uint)byteStatus & 0x03;
-
-                                //string DataString;
-                                //if (data.Length > 9)
-                                //{
-                                //    DataString = Encoding.ASCII.GetString(data, 0, data.Length);
-                                //}
+                                reader.ReadBytes(data);
                             }
 
+                            byte[] patternA = new byte[3] { Convert.ToByte('A'), Convert.ToByte('S'), Convert.ToByte('E') };
+                            byte[] patternS = new byte[3] { Convert.ToByte('a'), Convert.ToByte('s'), Convert.ToByte('e') };
+                            if (IndexOf(data, patternA) >= 0) mbd.bIsActive = true;
+
+                            int istartLen = -1;
+                            if (IndexOf(data, patternA) >= 0) istartLen = IndexOf(data, patternA) + 6;
+                            if (IndexOf(data, patternS) >= 0) istartLen = IndexOf(data, patternS) + 6;
+
+                            Int32 baseTime = 0;
+                            byte byteStatus = 0;
+                            if (istartLen > 0)
+                            {
+                                baseTime = BitConverter.ToInt32(data, istartLen);
+                                if (data.Length > istartLen + 4)
+                                    byteStatus = data[istartLen + 4];
+                            }
+
+                            Int32 unixTimestampNow = (Int32)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+                            if (Math.Abs(baseTime - unixTimestampNow) < 10) mbd.bIsTime = true;
 
 
-                            BleList.GetOrAdd(device.DeviceId, mbd);
-                            RefreshList();
+                            if ((byteStatus & (1 << 2)) > 0) mbd.bIsAlarm = true;
+                            mbd.uAkk = (uint)byteStatus & 0x03;
+
+                            //string DataString;
+                            //if (data.Length > 9)
+                            //{
+                            //    DataString = Encoding.ASCII.GetString(data, 0, data.Length);
+                            //}
                         }
+
+                        BleList.GetOrAdd((ulong)args.BluetoothAddress, mbd);
+                        RefreshList();
                     }
                 }
             }
@@ -1098,33 +1102,18 @@ namespace BLE_setup
 
         public static stMyBleDevice GetMbdFromList(string sBleMacAddr)
         {
-            foreach (stMyBleDevice mbd in BleList.Values)
-            {
-                if (mbd.sBleMacAddr == sBleMacAddr)
-                {
-                    return mbd;
-                }
-            }
+            stMyBleDevice mbd = null;
+            ulong uba = (ulong)Convert.ToInt64(sBleMacAddr, 16);
+            if (BleList.ContainsKey(uba)) BleList.TryGetValue(uba, out mbd);
 
-            return null;
+            return mbd;
         }
 
         public static void DelFromList(string sBleMacAddr)
         {
-            string sKey = null;
-            foreach (stMyBleDevice mbd in BleList.Values)
-            {
-                if (mbd.sBleMacAddr == sBleMacAddr)
-                {
-                    sKey = mbd.sBleId;
-                    break;
-                }
-            }
-            if (sKey != null)
-            {
-                stMyBleDevice ret = new stMyBleDevice();
-                BleList.TryRemove(sKey, out ret);
-            }
+            ulong uba = (ulong)Convert.ToInt64(sBleMacAddr, 16);
+            stMyBleDevice ret = new stMyBleDevice();
+            if (BleList.ContainsKey(uba)) BleList.TryRemove(uba, out ret);
         }
     }
 }
