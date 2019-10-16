@@ -1144,7 +1144,7 @@
             this.panel_settingsTag.Controls.Add(this.label28);
             this.panel_settingsTag.Controls.Add(this.textBoxNameTag);
             this.panel_settingsTag.Controls.Add(this.label29);
-            this.panel_settingsTag.Location = new System.Drawing.Point(745, 383);
+            this.panel_settingsTag.Location = new System.Drawing.Point(737, 382);
             this.panel_settingsTag.Name = "panel_settingsTag";
             this.panel_settingsTag.Size = new System.Drawing.Size(600, 600);
             this.panel_settingsTag.TabIndex = 6;
@@ -1155,9 +1155,9 @@
             this.label_battTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label_battTag.Location = new System.Drawing.Point(271, 33);
             this.label_battTag.Name = "label_battTag";
-            this.label_battTag.Size = new System.Drawing.Size(51, 20);
+            this.label_battTag.Size = new System.Drawing.Size(24, 20);
             this.label_battTag.TabIndex = 29;
-            this.label_battTag.Text = "label5";
+            this.label_battTag.Text = "---";
             // 
             // label_nameTag
             // 
@@ -1165,9 +1165,9 @@
             this.label_nameTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label_nameTag.Location = new System.Drawing.Point(68, 13);
             this.label_nameTag.Name = "label_nameTag";
-            this.label_nameTag.Size = new System.Drawing.Size(51, 20);
+            this.label_nameTag.Size = new System.Drawing.Size(24, 20);
             this.label_nameTag.TabIndex = 26;
-            this.label_nameTag.Text = "label5";
+            this.label_nameTag.Text = "---";
             // 
             // label32
             // 
@@ -1185,9 +1185,9 @@
             this.label_versTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label_versTag.Location = new System.Drawing.Point(271, 13);
             this.label_versTag.Name = "label_versTag";
-            this.label_versTag.Size = new System.Drawing.Size(51, 20);
+            this.label_versTag.Size = new System.Drawing.Size(24, 20);
             this.label_versTag.TabIndex = 28;
-            this.label_versTag.Text = "label5";
+            this.label_versTag.Text = "---";
             // 
             // label34
             // 
@@ -1205,9 +1205,9 @@
             this.label_MACTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label_MACTag.Location = new System.Drawing.Point(68, 33);
             this.label_MACTag.Name = "label_MACTag";
-            this.label_MACTag.Size = new System.Drawing.Size(51, 20);
+            this.label_MACTag.Size = new System.Drawing.Size(24, 20);
             this.label_MACTag.TabIndex = 27;
-            this.label_MACTag.Text = "label5";
+            this.label_MACTag.Text = "---";
             // 
             // label36
             // 
