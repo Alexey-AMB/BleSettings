@@ -3,16 +3,35 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
+using System.Collections;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using BLE_setup;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace BleSettings
 {   
+    public struct stOneRun
+    {
+        public string sNameTag;
+        public string sID;
+        public DateTime dtFirstBase;
+        public string sTypeTag; //BLE | RFID
+
+        public stOneBase[] arBases;
+    }
+
+    public struct stOneBase
+    {
+        public int iNumBase;
+        public DateTime dtTime;
+        public string tsDelta;
+    }
+
     public partial class Form_main : Form
     {
         public class BaseWorkType
@@ -24,7 +43,16 @@ namespace BleSettings
         private bool bBaseOrTag = true;
         private DataGridViewSelectedRowCollection currSelectedRow = null;
 
+        byte[] nblk = new byte[1];
+
+        stMyBleDevice curr_mbd;
+        stOneRun oR = new stOneRun();
+
+        private bool bShowSaveTagResult = true;
+
         private int iCurrCommand = -1;
+
+        private string sFolderNameSaveTagsResult = "";
 
         //========================================================================
         public Form_main()
@@ -216,7 +244,7 @@ namespace BleSettings
 
                     SendCommand(cmd, databuf);
                     if (fp != null) fp.AddProgressValue();
-                    WaitCurrComm();
+                    WaitCurrComm();                    
                     if (bRemovefromList)
                     {
                         BLE_com.DelFromList(mbd.sBleMacAddr);
@@ -315,10 +343,14 @@ namespace BleSettings
                         }), null);
                         break;
                     case (int)InCommandTag.CMD_READ_DATA:
-                        synchronizationContext.Post(new SendOrPostCallback(o =>
+                        if (!bShowSaveTagResult) ShowTagResult(pBuffIn, false);
+                        else
                         {
-                            ShowTagResult(pBuffIn);
-                        }), null);
+                            synchronizationContext.Post(new SendOrPostCallback(o =>
+                            {
+                                ShowTagResult(pBuffIn, true);
+                            }), null);
+                        }
                         break;
                     default:
                         break;
@@ -485,6 +517,12 @@ namespace BleSettings
 
         private void ShowKMResult(byte[] res)
         {
+            oR.sID = curr_mbd.sBleMacAddr;
+            oR.sNameTag = curr_mbd.sName.Trim();
+            oR.sTypeTag = "RFID";
+            oR.dtFirstBase = new DateTime();
+            ArrayList arBases = new ArrayList();
+
             int iIndex = 4;
             byte[] qBaseTime = new byte[4];
             qBaseTime[3] = res[4];
@@ -504,7 +542,7 @@ namespace BleSettings
             DataColumn TimeBase;
             DataColumn TimeDelta;
 
-            dt = new DataTable("Table1");
+            DataTable dt = new DataTable("Table1");
             Numbase = new DataColumn("NameBase", Type.GetType("System.String"));
             TimeBase = new DataColumn("Time", Type.GetType("System.String"));
             TimeDelta = new DataColumn("Delta", Type.GetType("System.String"));
@@ -512,9 +550,7 @@ namespace BleSettings
             dt.Columns.Add(Numbase);
             dt.Columns.Add(TimeBase);
             dt.Columns.Add(TimeDelta);
-            //
-
-
+           
             if (iStartBlockTime > ut01012019)
             {
                 int iNumbase = 0;
@@ -534,8 +570,7 @@ namespace BleSettings
 
                     int iBaseTime = BitConverter.ToInt32(aBaseTime, 0);
                     DateTime tBaseTime = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(iBaseTime);
-
-
+                    
                     dr = dt.NewRow();
                     dr["NameBase"] = iNumbase.ToString();
                     if (iNumbase == 240) dr["NameBase"] = "Start";
@@ -544,10 +579,19 @@ namespace BleSettings
                     dr["Time"] = tBaseTime.ToString("dd.MM.yyyy hh:mm:ss");
                     dr["Delta"] = (tBaseTime - tBaseTimePrev).ToString();
                     dt.Rows.Add(dr);
+
+                    stOneBase ob = new stOneBase();
+                    ob.dtTime = tBaseTime;
+                    ob.iNumBase = iNumbase;
+                    ob.tsDelta = (tBaseTime - tBaseTimePrev).ToString();
+
                     tBaseTimePrev = tBaseTime;
+                    if (oR.dtFirstBase < new DateTime(2019, 1, 1, 0, 0, 0, 0)) oR.dtFirstBase = tBaseTime;
+                    arBases.Add(ob);
 
                 } while (iIndex < res.Length - 4);
                 ds.Tables.Add(dt);
+                oR.arBases = (stOneBase[])arBases.ToArray(typeof(stOneBase));
 
                 this.dataGridView2.Visible = true;
                 this.dataGridView2.AutoGenerateColumns = true;
@@ -563,7 +607,7 @@ namespace BleSettings
             this.labelKmNumber.Text = "Карта № " + res[0].ToString();            
         }
 
-        private void ExportDgvToXML(DataTable dt, string sFileName)
+        private void ExportDgvToXML(stOneRun dt, string sFileName)
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "XML|*.xml";
@@ -571,13 +615,18 @@ namespace BleSettings
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
+                XmlSerializer formatter = new XmlSerializer(typeof(stOneRun));
                 try
                 {
-                    dt.WriteXml(sfd.FileName);
+                    if (File.Exists(sfd.FileName)) File.Delete(sfd.FileName);
+                    using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
+                    {
+                        formatter.Serialize(fs, oR);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+
                 }
             }
         }
@@ -863,7 +912,7 @@ namespace BleSettings
         {
             string s = "";
             s = this.labelKmNumber.Text.Trim();
-            ExportDgvToXML(dt, s);
+            ExportDgvToXML(oR, s);
         }
 
         private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)
@@ -947,10 +996,7 @@ namespace BleSettings
         {
             ButtonCommandSend(InCommandTag.CMD_SET_MODE_RUN, null, true);
         }
-
-        byte[] nblk = new byte[1];
-        DataTable dt;
-        stMyBleDevice curr_mbd;
+               
         private async void Button_Tag_GetData_Click(object sender, EventArgs e)
         {
             if (currSelectedRow == null) return;
@@ -959,6 +1005,8 @@ namespace BleSettings
                 MessageBox.Show("Выберите только одно устройство!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            bShowSaveTagResult = true;
 
             DisableButtons(false);
             this.panel_resultTag.Dock = DockStyle.Fill;
@@ -1006,7 +1054,7 @@ namespace BleSettings
         {
             string s = "";
             if(curr_mbd != null) s = curr_mbd.sBleMacAddr + "_" + curr_mbd.sName.Trim(' ') + "_Забег_" + (nblk[0]-1).ToString();
-            ExportDgvToXML(dt, s);
+            ExportDgvToXML(oR, s);
         }
 
         private void EnableButtonsZabeg(bool b)
@@ -1048,13 +1096,15 @@ namespace BleSettings
         
         private void ShowTagResult(byte[] res)
         {
+
+
             int iIndex = 0;
             int iStartBlockTime = BitConverter.ToInt32(res, iIndex);
             int ut01012019 = (int)(new DateTime(2019, 1, 1) - new DateTime(1970, 1, 1)).TotalSeconds;
 
             DateTime tStartBlockTime = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(iStartBlockTime);
 
-            //
+            DataTable dt;
             DataSet ds = new DataSet();
 
             DataRow dr;
@@ -1120,6 +1170,125 @@ namespace BleSettings
             }
             this.labelNumZabeg.Text = (nblk[0]-1).ToString();
             EnableButtonsZabeg(true);
+        }
+
+        /// <summary>
+        /// Показ или сохранение результатов забега с BLE метки
+        /// </summary>
+        /// <param name="res">Буфер, пришедший с метки</param>
+        /// <param name="bShow">1-показать, 0-сохранить</param>
+        private void ShowTagResult(byte[] res, bool bShow)
+        {            
+            oR.sID = curr_mbd.sBleMacAddr;
+            oR.sNameTag = curr_mbd.sName.Trim();
+            oR.sTypeTag = "BLE";
+            oR.dtFirstBase = new DateTime();
+            ArrayList arBases = new ArrayList();
+
+
+            int iIndex = 0;
+            int iStartBlockTime = BitConverter.ToInt32(res, iIndex);
+            int ut01012019 = (int)(new DateTime(2019, 1, 1) - new DateTime(1970, 1, 1)).TotalSeconds;
+
+            DateTime tStartBlockTime = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(iStartBlockTime);
+
+            //
+            DataSet ds = new DataSet();
+
+            DataRow dr;
+            DataColumn Numbase;
+            DataColumn TimeBase;
+            DataColumn TimeDelta;
+
+            DataTable dt1 = new DataTable("Table1");
+            Numbase = new DataColumn("NameBase", Type.GetType("System.String"));
+            TimeBase = new DataColumn("Time", Type.GetType("System.String"));
+            TimeDelta = new DataColumn("Delta", Type.GetType("System.String"));
+
+            dt1.Columns.Add(Numbase);
+            dt1.Columns.Add(TimeBase);
+            dt1.Columns.Add(TimeDelta);
+
+            if (iStartBlockTime > ut01012019)
+            {
+                int iNumbase = 0;
+                DateTime tBaseTimePrev = tStartBlockTime;
+                do
+                {
+                    iIndex += 4;
+
+                    iNumbase = (int)res[iIndex];
+                    if (iNumbase == 0) break;
+
+                    byte[] aBaseTime = new byte[4];
+                    aBaseTime[3] = res[3];
+                    aBaseTime[2] = res[iIndex + 1];
+                    aBaseTime[1] = res[iIndex + 2];
+                    aBaseTime[0] = res[iIndex + 3];
+
+                    int iBaseTime = BitConverter.ToInt32(aBaseTime, 0);
+                    DateTime tBaseTime = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(iBaseTime);
+                    
+                    dr = dt1.NewRow();
+                    dr["NameBase"] = iNumbase.ToString();
+                    if (iNumbase == 240) dr["NameBase"] = "Start";
+                    if (iNumbase == 245) dr["NameBase"] = "Finish";
+                    if (iNumbase == 248) dr["NameBase"] = "Check";
+                    dr["Time"] = tBaseTime.ToString("dd.MM.yyyy hh:mm:ss");
+                    dr["Delta"] = (tBaseTime - tBaseTimePrev).ToString();
+                    dt1.Rows.Add(dr);
+                    
+                    stOneBase ob = new stOneBase();
+                    ob.dtTime = tBaseTime;
+                    ob.iNumBase = iNumbase;
+                    ob.tsDelta = (tBaseTime - tBaseTimePrev).ToString();
+
+                    tBaseTimePrev = tBaseTime;
+                    if (oR.dtFirstBase < new DateTime(2019, 1, 1, 0, 0, 0, 0)) oR.dtFirstBase = tBaseTime;
+                    arBases.Add(ob);
+
+                } while (iIndex < res.Length);
+                ds.Tables.Add(dt1);
+                oR.arBases = (stOneBase[])arBases.ToArray(typeof(stOneBase));
+
+                if (bShow)
+                {
+                    this.dataGridView3.Visible = true;
+                    this.dataGridView3.AutoGenerateColumns = true;
+                    this.dataGridView3.DataSource = ds;
+                    this.dataGridView3.DataMember = "Table1";
+                    this.dataGridView3.Refresh();
+                }
+                else
+                {
+                    string s = "";
+                    if (curr_mbd != null) s = sFolderNameSaveTagsResult + "\\" + curr_mbd.sBleMacAddr + "_" + curr_mbd.sName.Trim(' ') + "_Забег_" + (nblk[0] - 1).ToString() + ".xml";
+
+                    XmlSerializer formatter = new XmlSerializer(typeof(stOneRun));
+                    try
+                    {
+                        if (File.Exists(s)) File.Delete(s);
+                        using (FileStream fs = new FileStream(s, FileMode.Create))
+                        {
+                            formatter.Serialize(fs, oR);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+            else
+            {
+                //Блок не читается              
+                if (bShow) this.dataGridView3.Visible = false;
+            }
+            if (bShow)
+            {
+                this.labelNumZabeg.Text = (nblk[0] - 1).ToString();
+                EnableButtonsZabeg(true);
+            }
         }
 
         private void ShowTagSettings(SPORT_TAG_SETTINGS sts)
@@ -1197,7 +1366,63 @@ namespace BleSettings
         {
             this.panel_settingsTag.Enabled = false;
         }
-        
+
+        private async void Button_Tag_ReadAllTag_Click(object sender, EventArgs e)
+        {
+            if (currSelectedRow == null) return;
+            if (currSelectedRow.Count == 0) return;
+
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (sFolderNameSaveTagsResult.Length > 3) fbd.SelectedPath = sFolderNameSaveTagsResult;
+            if (fbd.ShowDialog() != DialogResult.OK) return;
+            sFolderNameSaveTagsResult = fbd.SelectedPath;
+            
+            DisableButtons(false);
+
+            Form_progress fp = null;
+            if (currSelectedRow.Count > 1)
+            {
+                fp = new Form_progress(currSelectedRow.Count);
+                fp.Location = this.Location;
+                fp.Show();
+            }
+
+            bShowSaveTagResult = false;
+
+            foreach (DataGridViewRow r in currSelectedRow)
+            {
+                curr_mbd = BLE_com.GetMbdFromList(r.Cells[1].Value.ToString());
+                if (curr_mbd == null) continue;
+
+                if (await BLE_com.OpenBle(curr_mbd.sBleId, curr_mbd.type))
+                {
+                    BLE_com.cCmdNext = (byte)InCommandTag.CMD_NEXT;
+
+                    for (int i = 2; i < 7; i++) //читаем блоки со 2-го по 7-й
+                    {
+                        nblk[0] = (byte)i;
+                        SendCommand(InCommandTag.CMD_READ_DATA, nblk);
+
+                        int iCount = 0;
+                        while (iCurrCommand > 0)
+                        {
+                            Thread.Sleep(100);
+                            iCount++;
+                            if (iCount > 100) break;
+                        }
+                    }
+                    if (fp != null) fp.AddProgressValue();
+                }
+                BLE_com.CloseBle();
+            }
+
+            if (fp != null) fp.Close();
+
+            bShowSaveTagResult = true;
+
+            DisableButtons(true);
+        }
+
         #endregion
         //========================================================================
 
