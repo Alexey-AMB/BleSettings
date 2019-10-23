@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // progressBar1
@@ -37,13 +38,26 @@
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(613, 30);
             this.progressBar1.TabIndex = 0;
+            this.progressBar1.UseWaitCursor = true;
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Location = new System.Drawing.Point(641, 13);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(79, 29);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Стоп";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // Form_progress
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(638, 54);
+            this.ClientSize = new System.Drawing.Size(733, 54);
             this.ControlBox = false;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.progressBar1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form_progress";
@@ -60,5 +74,6 @@
         #endregion
 
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button button1;
     }
 }

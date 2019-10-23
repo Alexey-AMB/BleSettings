@@ -12,6 +12,8 @@ namespace BleSettings
 {
     public partial class Form_progress : Form
     {
+        public delegate void HaveStop();
+        public static event HaveStop MyStop;
         public Form_progress(int iMaxProgress)
         {
             InitializeComponent();
@@ -21,6 +23,11 @@ namespace BleSettings
         public void AddProgressValue()
         {
             this.progressBar1.Value++;
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            MyStop();
         }
     }
 }

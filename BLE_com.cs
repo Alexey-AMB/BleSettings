@@ -277,9 +277,9 @@ namespace BLE_setup
                         while (iCount < 3)
                         {
                             if (result.Status == GattCommunicationStatus.Success) break;
-                            result = await _selectedDevice.GetGattServicesAsync(BluetoothCacheMode.Uncached);                            
-                            iCount++;
                             Thread.Sleep(1000);
+                            result = await _selectedDevice.GetGattServicesAsync(BluetoothCacheMode.Uncached);                            
+                            iCount++;                            
                         }
 
                         if (result.Status == GattCommunicationStatus.Success)

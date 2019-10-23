@@ -54,6 +54,8 @@ namespace BleSettings
 
         private string sFolderNameSaveTagsResult = "";
 
+        private bool bUserStop = false;
+
         //========================================================================
         public Form_main()
         {
@@ -191,6 +193,7 @@ namespace BleSettings
             {
                 fp = new Form_progress(currSelectedRow.Count);
                 fp.Location = this.Location;
+                Form_progress.MyStop += Form_progress_MyStop;
                 fp.Show();
             }
             foreach (DataGridViewRow r in currSelectedRow)
@@ -204,7 +207,9 @@ namespace BleSettings
 
                     SendCommand(cmd, databuf);
                     if (fp != null) fp.AddProgressValue();
-                    WaitCurrComm();
+
+                    if ((cmd != InCommandBase.CMD_MODE_ACTIVE) && (cmd != InCommandBase.CMD_MODE_SLEEP) && (cmd != InCommandBase.CMD_MODE_WAIT))
+                        WaitCurrComm();
                     if (bRemovefromList)
                     {
                         BLE_com.DelFromList(mbd.sBleMacAddr);
@@ -212,13 +217,19 @@ namespace BleSettings
                     }
                 }
                 BLE_com.CloseBle();
+                if (bUserStop) break;
             }
 
-            if (fp != null) fp.Close();
+            if (fp != null)
+            {
+                Form_progress.MyStop -= Form_progress_MyStop;
+                fp.Close();
+                bUserStop = false;
+            }
 
             DisableButtons(true);
         }
-
+        
         private async void ButtonCommandSend(InCommandTag cmd, byte[] databuf, bool bRemovefromList)
         {
             if (currSelectedRow == null) return;
@@ -231,6 +242,7 @@ namespace BleSettings
             {
                 fp = new Form_progress(currSelectedRow.Count);
                 fp.Location = this.Location;
+                Form_progress.MyStop += Form_progress_MyStop;
                 fp.Show();
             }
             foreach (DataGridViewRow r in currSelectedRow)
@@ -244,7 +256,10 @@ namespace BleSettings
 
                     SendCommand(cmd, databuf);
                     if (fp != null) fp.AddProgressValue();
-                    WaitCurrComm();                    
+
+                    if((cmd != InCommandTag.CMD_SET_MODE_RUN)&&(cmd != InCommandTag.CMD_SET_MODE_CONN) &&(cmd != InCommandTag.CMD_SET_MODE_SLEEP))
+                        WaitCurrComm();                    
+
                     if (bRemovefromList)
                     {
                         BLE_com.DelFromList(mbd.sBleMacAddr);
@@ -252,9 +267,15 @@ namespace BleSettings
                     }
                 }
                 BLE_com.CloseBle();
+                if (bUserStop) break;
             }
 
-            if (fp != null) fp.Close();
+            if (fp != null)
+            {
+                Form_progress.MyStop -= Form_progress_MyStop;
+                fp.Close();
+                bUserStop = false;
+            }
 
             DisableButtons(true);
         }
@@ -372,6 +393,11 @@ namespace BleSettings
                 this.label_status.Text = "ERROR!";
             }), null);
             iCurrCommand = -1;
+        }
+
+        private void Form_progress_MyStop()
+        {
+            bUserStop = true;
         }
         //========================================================================
 
@@ -698,6 +724,7 @@ namespace BleSettings
             {
                 fp = new Form_progress(currSelectedRow.Count);
                 fp.Location = this.Location;
+                Form_progress.MyStop += Form_progress_MyStop;
                 fp.Show();
             }
             foreach (DataGridViewRow r in currSelectedRow)
@@ -720,9 +747,15 @@ namespace BleSettings
                     UpdateGridDevices();
                 }
                 BLE_com.CloseBle();
+                if (bUserStop) break;
             }
 
-            if (fp != null) fp.Close();
+            if (fp != null)
+            {
+                Form_progress.MyStop -= Form_progress_MyStop;
+                fp.Close();
+                bUserStop = false;
+            }
 
             DisableButtons(true);
         }
@@ -1378,12 +1411,15 @@ namespace BleSettings
             sFolderNameSaveTagsResult = fbd.SelectedPath;
             
             DisableButtons(false);
+            this.button_showBase.Enabled = false;
+            this.button_showTag.Enabled = false;
 
             Form_progress fp = null;
             if (currSelectedRow.Count > 1)
             {
                 fp = new Form_progress(currSelectedRow.Count);
                 fp.Location = this.Location;
+                Form_progress.MyStop += Form_progress_MyStop;
                 fp.Show();
             }
 
@@ -1415,13 +1451,21 @@ namespace BleSettings
                 }
                 BLE_com.CloseBle();
                 Thread.Sleep(100);
+                if (bUserStop) break;
             }
 
-            if (fp != null) fp.Close();
+            if (fp != null)
+            {
+                Form_progress.MyStop -= Form_progress_MyStop;
+                fp.Close();
+                bUserStop = false;
+            }
 
             bShowSaveTagResult = true;
 
             DisableButtons(true);
+            this.button_showBase.Enabled = true;
+            this.button_showTag.Enabled = true;
         }
 
         #endregion
