@@ -200,6 +200,8 @@ namespace BLE_setup
 
     public static class BLE_com
     {
+        private const double iTimeOutOpenDevice = 10000;   //ms
+
         public static object oLock = new object();
         public const int SizeStCommand = 5;
 
@@ -246,7 +248,7 @@ namespace BLE_setup
         //static BluetoothLEAttributeDisplay _selectedCharacteristic = null;
 
         private static List<GattCharacteristic> _subscribers = new List<GattCharacteristic>();
-        private static TimeSpan _timeout = TimeSpan.FromSeconds(3);
+        private static TimeSpan _timeout = TimeSpan.FromMilliseconds(iTimeOutOpenDevice);
         private static async Task<int> OpenDevice(string deviceName)
         {
             int retVal = 0;
@@ -268,7 +270,18 @@ namespace BLE_setup
 
                         _selectedDevice = await BluetoothLEDevice.FromIdAsync(foundId).AsTask().TimeoutAfter(_timeout);
 
-                        var result = await _selectedDevice.GetGattServicesAsync(BluetoothCacheMode.Uncached);
+                        int iCount = 0;
+
+                        GattDeviceServicesResult result = await _selectedDevice.GetGattServicesAsync(BluetoothCacheMode.Uncached);
+
+                        while (iCount < 3)
+                        {
+                            if (result.Status == GattCommunicationStatus.Success) break;
+                            result = await _selectedDevice.GetGattServicesAsync(BluetoothCacheMode.Uncached);                            
+                            iCount++;
+                            Thread.Sleep(1000);
+                        }
+
                         if (result.Status == GattCommunicationStatus.Success)
                         {
                             for (int i = 0; i < result.Services.Count; i++)
@@ -280,11 +293,13 @@ namespace BLE_setup
                         else
                         {
                             retVal += 1;
+                            throw new Exception("Unable connect to BLE device - timeout.");
                         }
                     }
                     catch
                     {
                         retVal += 1;
+                        throw new Exception("Unable connect to BLE device - timeout.");
                     }
                 }
                 else

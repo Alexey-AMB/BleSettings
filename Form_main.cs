@@ -406,7 +406,7 @@ namespace BleSettings
             {
                 Thread.Sleep(50);
                 iCount++;
-                if (iCount > 40) break;
+                if (iCount > 100) break;
             }
         }
 
@@ -1414,6 +1414,7 @@ namespace BleSettings
                     if (fp != null) fp.AddProgressValue();
                 }
                 BLE_com.CloseBle();
+                Thread.Sleep(100);
             }
 
             if (fp != null) fp.Close();
