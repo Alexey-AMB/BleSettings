@@ -5,7 +5,6 @@ D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.Form_main
 D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.Form_progress.resources
 D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.Properties.Resources.resources
 D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.csproj.GenerateResource.cache
-D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.csproj.CoreCompileInputs.cache
 D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.exe
 D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.pdb
 D:\MyProjects\VS_NET2019\BleSettings\BleSettings\obj\Debug\BleSettings.csprojAssemblyReference.cache

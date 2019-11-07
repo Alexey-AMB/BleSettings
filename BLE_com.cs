@@ -1130,5 +1130,14 @@ namespace BLE_setup
             stMyBleDevice ret = new stMyBleDevice();
             if (BleList.ContainsKey(uba)) BleList.TryRemove(uba, out ret);
         }
+
+        public static void Watcher_StartStop(bool bRun)
+        {
+            if(bRun) _watcher.Start();
+            else _watcher.Stop();
+        }
+
+
+
     }
 }

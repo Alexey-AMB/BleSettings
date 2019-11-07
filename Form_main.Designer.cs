@@ -36,6 +36,7 @@
             this.button_showBase = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel_buttonTag = new System.Windows.Forms.Panel();
+            this.button_Tag_ReadAllTag = new System.Windows.Forms.Button();
             this.button_Tag_GetData = new System.Windows.Forms.Button();
             this.button_Tag_Blink = new System.Windows.Forms.Button();
             this.button_Tag_ModeRUN = new System.Windows.Forms.Button();
@@ -139,7 +140,7 @@
             this.textBoxNameTag = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.panel_start = new System.Windows.Forms.Panel();
-            this.button_Tag_ReadAllTag = new System.Windows.Forms.Button();
+            this.label_version = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -171,6 +172,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label_version);
             this.groupBox1.Controls.Add(this.label_status);
             this.groupBox1.Controls.Add(this.dataGridView1);
             this.groupBox1.Controls.Add(this.panel2);
@@ -266,6 +268,17 @@
             this.panel_buttonTag.Name = "panel_buttonTag";
             this.panel_buttonTag.Size = new System.Drawing.Size(188, 582);
             this.panel_buttonTag.TabIndex = 4;
+            // 
+            // button_Tag_ReadAllTag
+            // 
+            this.button_Tag_ReadAllTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_Tag_ReadAllTag.Location = new System.Drawing.Point(15, 503);
+            this.button_Tag_ReadAllTag.Name = "button_Tag_ReadAllTag";
+            this.button_Tag_ReadAllTag.Size = new System.Drawing.Size(160, 39);
+            this.button_Tag_ReadAllTag.TabIndex = 6;
+            this.button_Tag_ReadAllTag.Text = "Считать метки";
+            this.button_Tag_ReadAllTag.UseVisualStyleBackColor = true;
+            this.button_Tag_ReadAllTag.Click += new System.EventHandler(this.Button_Tag_ReadAllTag_Click);
             // 
             // button_Tag_GetData
             // 
@@ -873,7 +886,7 @@
             this.panel_contaktBase.Controls.Add(this.groupBox3);
             this.panel_contaktBase.Controls.Add(this.groupBox4);
             this.panel_contaktBase.Enabled = false;
-            this.panel_contaktBase.Location = new System.Drawing.Point(523, 516);
+            this.panel_contaktBase.Location = new System.Drawing.Point(523, 96);
             this.panel_contaktBase.Name = "panel_contaktBase";
             this.panel_contaktBase.Size = new System.Drawing.Size(600, 600);
             this.panel_contaktBase.TabIndex = 4;
@@ -1023,7 +1036,7 @@
             this.panel_resultTag.Controls.Add(this.button_closeResultTag);
             this.panel_resultTag.Controls.Add(this.groupBox5);
             this.panel_resultTag.Enabled = false;
-            this.panel_resultTag.Location = new System.Drawing.Point(551, 16);
+            this.panel_resultTag.Location = new System.Drawing.Point(867, 280);
             this.panel_resultTag.Name = "panel_resultTag";
             this.panel_resultTag.Size = new System.Drawing.Size(600, 600);
             this.panel_resultTag.TabIndex = 5;
@@ -1504,16 +1517,14 @@
             this.panel_start.Size = new System.Drawing.Size(351, 277);
             this.panel_start.TabIndex = 7;
             // 
-            // button_Tag_ReadAllTag
+            // label_version
             // 
-            this.button_Tag_ReadAllTag.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_Tag_ReadAllTag.Location = new System.Drawing.Point(15, 503);
-            this.button_Tag_ReadAllTag.Name = "button_Tag_ReadAllTag";
-            this.button_Tag_ReadAllTag.Size = new System.Drawing.Size(160, 39);
-            this.button_Tag_ReadAllTag.TabIndex = 6;
-            this.button_Tag_ReadAllTag.Text = "Считать метки";
-            this.button_Tag_ReadAllTag.UseVisualStyleBackColor = true;
-            this.button_Tag_ReadAllTag.Click += new System.EventHandler(this.Button_Tag_ReadAllTag_Click);
+            this.label_version.AutoSize = true;
+            this.label_version.Location = new System.Drawing.Point(6, 583);
+            this.label_version.Name = "label_version";
+            this.label_version.Size = new System.Drawing.Size(41, 13);
+            this.label_version.TabIndex = 8;
+            this.label_version.Text = "version";
             // 
             // Form_main
             // 
@@ -1685,6 +1696,7 @@
         private System.Windows.Forms.Button button_saveKMresult;
         private System.Windows.Forms.Panel panel_start;
         private System.Windows.Forms.Button button_Tag_ReadAllTag;
+        private System.Windows.Forms.Label label_version;
     }
 }
 

@@ -34,6 +34,9 @@ namespace BleSettings
 
     public partial class Form_main : Form
     {
+        //========================================================================
+        private const string ver = "2019.11.07";
+        //========================================================================
         public class BaseWorkType
         {
             public string Name { get; set; }
@@ -76,7 +79,9 @@ namespace BleSettings
         }
 
         private void Form_main_Load(object sender, EventArgs e)
-        {                        
+        {
+            this.label_version.Text = "v. " + ver;
+
             BLE_com.RefreshList += BLE_com_RefreshList;
             BLE_com.BuffChaged += BLE_com_BuffChanged;
             BLE_com.BuffError += BLE_com_BuffError;
@@ -492,6 +497,9 @@ namespace BleSettings
             {
                 c.Enabled = bState;
             }
+
+            BLE_com.Watcher_StartStop(bState);
+
         }
 
         private void ShowBaseSettings(SPORT_BASE_SETTINGS sbs)
@@ -543,8 +551,8 @@ namespace BleSettings
 
         private void ShowKMResult(byte[] res)
         {
-            oR.sID = curr_mbd.sBleMacAddr;
-            oR.sNameTag = curr_mbd.sName.Trim();
+            oR.sID = "KM_" + res[0].ToString(); ;
+            oR.sNameTag = "KM_" + res[0].ToString();
             oR.sTypeTag = "RFID";
             oR.dtFirstBase = new DateTime();
             ArrayList arBases = new ArrayList();
@@ -1467,6 +1475,8 @@ namespace BleSettings
             this.button_showBase.Enabled = true;
             this.button_showTag.Enabled = true;
         }
+
+       
 
         #endregion
         //========================================================================
