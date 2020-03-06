@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label_version = new System.Windows.Forms.Label();
             this.label_status = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -50,6 +51,13 @@
             this.button_Base_Active = new System.Windows.Forms.Button();
             this.button_Base_Settings = new System.Windows.Forms.Button();
             this.button_Base_Sleep = new System.Windows.Forms.Button();
+            this.panel_alarmBase = new System.Windows.Forms.Panel();
+            this.button_baseRunSetTime = new System.Windows.Forms.Button();
+            this.dateTimePickerRunStop = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerRunStart = new System.Windows.Forms.DateTimePicker();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.label_battBase = new System.Windows.Forms.Label();
             this.label_versBase = new System.Windows.Forms.Label();
             this.label_MACBase = new System.Windows.Forms.Label();
@@ -59,6 +67,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel_settingsBase = new System.Windows.Forms.Panel();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.numericUpDownTimeWaitKM = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.checkBoxLedInverse = new System.Windows.Forms.CheckBox();
@@ -80,13 +90,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.panel_alarmBase = new System.Windows.Forms.Panel();
-            this.button_baseRunSetTime = new System.Windows.Forms.Button();
-            this.dateTimePickerRunStop = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePickerRunStart = new System.Windows.Forms.DateTimePicker();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.panel_contaktBase = new System.Windows.Forms.Panel();
             this.button_saveKMresult = new System.Windows.Forms.Button();
             this.button_closeKMcard = new System.Windows.Forms.Button();
@@ -140,13 +143,13 @@
             this.textBoxNameTag = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.panel_start = new System.Windows.Forms.Panel();
-            this.label_version = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel_buttonTag.SuspendLayout();
             this.panel_buttonBase.SuspendLayout();
+            this.panel_alarmBase.SuspendLayout();
             this.panel_settingsBase.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeWaitKM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimerKm)).BeginInit();
@@ -154,7 +157,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPowerBleBase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeoutBase)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumBase)).BeginInit();
-            this.panel_alarmBase.SuspendLayout();
             this.panel_contaktBase.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -183,6 +185,15 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
+            // label_version
+            // 
+            this.label_version.AutoSize = true;
+            this.label_version.Location = new System.Drawing.Point(6, 583);
+            this.label_version.Name = "label_version";
+            this.label_version.Size = new System.Drawing.Size(41, 13);
+            this.label_version.TabIndex = 8;
+            this.label_version.Text = "version";
+            // 
             // label_status
             // 
             this.label_status.AutoSize = true;
@@ -210,6 +221,7 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(284, 512);
             this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             this.dataGridView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.DataGridView1_MouseClick);
             // 
             // panel2
@@ -426,6 +438,83 @@
             this.button_Base_Sleep.UseVisualStyleBackColor = true;
             this.button_Base_Sleep.Click += new System.EventHandler(this.Button_Base_Sleep_Click);
             // 
+            // panel_alarmBase
+            // 
+            this.panel_alarmBase.Controls.Add(this.button_baseRunSetTime);
+            this.panel_alarmBase.Controls.Add(this.dateTimePickerRunStop);
+            this.panel_alarmBase.Controls.Add(this.dateTimePickerRunStart);
+            this.panel_alarmBase.Controls.Add(this.label16);
+            this.panel_alarmBase.Controls.Add(this.label15);
+            this.panel_alarmBase.Controls.Add(this.label14);
+            this.panel_alarmBase.Enabled = false;
+            this.panel_alarmBase.Location = new System.Drawing.Point(503, 510);
+            this.panel_alarmBase.Name = "panel_alarmBase";
+            this.panel_alarmBase.Size = new System.Drawing.Size(441, 308);
+            this.panel_alarmBase.TabIndex = 3;
+            // 
+            // button_baseRunSetTime
+            // 
+            this.button_baseRunSetTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button_baseRunSetTime.Location = new System.Drawing.Point(133, 213);
+            this.button_baseRunSetTime.Name = "button_baseRunSetTime";
+            this.button_baseRunSetTime.Size = new System.Drawing.Size(150, 40);
+            this.button_baseRunSetTime.TabIndex = 5;
+            this.button_baseRunSetTime.Text = "Установить";
+            this.button_baseRunSetTime.UseVisualStyleBackColor = true;
+            this.button_baseRunSetTime.Click += new System.EventHandler(this.Button_baseRunSetTime_Click);
+            // 
+            // dateTimePickerRunStop
+            // 
+            this.dateTimePickerRunStop.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dateTimePickerRunStop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.dateTimePickerRunStop.CustomFormat = "dd.MM.yyyy HH:mm";
+            this.dateTimePickerRunStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dateTimePickerRunStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerRunStop.Location = new System.Drawing.Point(133, 135);
+            this.dateTimePickerRunStop.Name = "dateTimePickerRunStop";
+            this.dateTimePickerRunStop.Size = new System.Drawing.Size(187, 26);
+            this.dateTimePickerRunStop.TabIndex = 4;
+            // 
+            // dateTimePickerRunStart
+            // 
+            this.dateTimePickerRunStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dateTimePickerRunStart.Cursor = System.Windows.Forms.Cursors.Default;
+            this.dateTimePickerRunStart.CustomFormat = "dd.MM.yyyy HH:mm";
+            this.dateTimePickerRunStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dateTimePickerRunStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerRunStart.Location = new System.Drawing.Point(133, 75);
+            this.dateTimePickerRunStart.Name = "dateTimePickerRunStart";
+            this.dateTimePickerRunStart.Size = new System.Drawing.Size(187, 26);
+            this.dateTimePickerRunStart.TabIndex = 3;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(51, 145);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(76, 13);
+            this.label16.TabIndex = 2;
+            this.label16.Text = "Выключиться";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(51, 85);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(68, 13);
+            this.label15.TabIndex = 1;
+            this.label15.Text = "Включиться";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label14.Location = new System.Drawing.Point(50, 35);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(233, 20);
+            this.label14.TabIndex = 0;
+            this.label14.Text = "Установить время забега:";
+            // 
             // label_battBase
             // 
             this.label_battBase.AutoSize = true;
@@ -508,6 +597,8 @@
             // 
             // panel_settingsBase
             // 
+            this.panel_settingsBase.Controls.Add(this.label18);
+            this.panel_settingsBase.Controls.Add(this.label17);
             this.panel_settingsBase.Controls.Add(this.numericUpDownTimeWaitKM);
             this.panel_settingsBase.Controls.Add(this.label9);
             this.panel_settingsBase.Controls.Add(this.checkBoxLedInverse);
@@ -538,10 +629,27 @@
             this.panel_settingsBase.Controls.Add(this.label3);
             this.panel_settingsBase.Controls.Add(this.label2);
             this.panel_settingsBase.Enabled = false;
-            this.panel_settingsBase.Location = new System.Drawing.Point(651, 456);
+            this.panel_settingsBase.Location = new System.Drawing.Point(534, 466);
             this.panel_settingsBase.Name = "panel_settingsBase";
             this.panel_settingsBase.Size = new System.Drawing.Size(600, 600);
             this.panel_settingsBase.TabIndex = 2;
+            // 
+            // label18
+            // 
+            this.label18.Location = new System.Drawing.Point(318, 310);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(228, 37);
+            this.label18.TabIndex = 44;
+            this.label18.Text = "миллисекунд. При значении больше 10000 чтение карточек отключено.";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(318, 141);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(40, 13);
+            this.label17.TabIndex = 43;
+            this.label17.Text = "минут.";
             // 
             // numericUpDownTimeWaitKM
             // 
@@ -589,7 +697,7 @@
             0});
             this.numericUpDownTimerKm.Location = new System.Drawing.Point(236, 314);
             this.numericUpDownTimerKm.Maximum = new decimal(new int[] {
-            3000,
+            10500,
             0,
             0,
             0});
@@ -652,7 +760,7 @@
             0});
             this.numericUpDownTimeoutBase.Location = new System.Drawing.Point(236, 137);
             this.numericUpDownTimeoutBase.Maximum = new decimal(new int[] {
-            86400,
+            1440,
             0,
             0,
             0});
@@ -665,7 +773,7 @@
             this.numericUpDownTimeoutBase.Size = new System.Drawing.Size(75, 22);
             this.numericUpDownTimeoutBase.TabIndex = 34;
             this.numericUpDownTimeoutBase.Value = new decimal(new int[] {
-            21600,
+            1440,
             0,
             0,
             0});
@@ -802,83 +910,6 @@
             this.label13.TabIndex = 22;
             this.label13.Text = "Номер станции:";
             // 
-            // panel_alarmBase
-            // 
-            this.panel_alarmBase.Controls.Add(this.button_baseRunSetTime);
-            this.panel_alarmBase.Controls.Add(this.dateTimePickerRunStop);
-            this.panel_alarmBase.Controls.Add(this.dateTimePickerRunStart);
-            this.panel_alarmBase.Controls.Add(this.label16);
-            this.panel_alarmBase.Controls.Add(this.label15);
-            this.panel_alarmBase.Controls.Add(this.label14);
-            this.panel_alarmBase.Enabled = false;
-            this.panel_alarmBase.Location = new System.Drawing.Point(469, 567);
-            this.panel_alarmBase.Name = "panel_alarmBase";
-            this.panel_alarmBase.Size = new System.Drawing.Size(441, 308);
-            this.panel_alarmBase.TabIndex = 3;
-            // 
-            // button_baseRunSetTime
-            // 
-            this.button_baseRunSetTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button_baseRunSetTime.Location = new System.Drawing.Point(133, 213);
-            this.button_baseRunSetTime.Name = "button_baseRunSetTime";
-            this.button_baseRunSetTime.Size = new System.Drawing.Size(150, 40);
-            this.button_baseRunSetTime.TabIndex = 5;
-            this.button_baseRunSetTime.Text = "Установить";
-            this.button_baseRunSetTime.UseVisualStyleBackColor = true;
-            this.button_baseRunSetTime.Click += new System.EventHandler(this.Button_baseRunSetTime_Click);
-            // 
-            // dateTimePickerRunStop
-            // 
-            this.dateTimePickerRunStop.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dateTimePickerRunStop.Cursor = System.Windows.Forms.Cursors.Default;
-            this.dateTimePickerRunStop.CustomFormat = "dd.MM.yyyy HH:mm";
-            this.dateTimePickerRunStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dateTimePickerRunStop.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerRunStop.Location = new System.Drawing.Point(133, 135);
-            this.dateTimePickerRunStop.Name = "dateTimePickerRunStop";
-            this.dateTimePickerRunStop.Size = new System.Drawing.Size(187, 26);
-            this.dateTimePickerRunStop.TabIndex = 4;
-            // 
-            // dateTimePickerRunStart
-            // 
-            this.dateTimePickerRunStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dateTimePickerRunStart.Cursor = System.Windows.Forms.Cursors.Default;
-            this.dateTimePickerRunStart.CustomFormat = "dd.MM.yyyy HH:mm";
-            this.dateTimePickerRunStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dateTimePickerRunStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePickerRunStart.Location = new System.Drawing.Point(133, 75);
-            this.dateTimePickerRunStart.Name = "dateTimePickerRunStart";
-            this.dateTimePickerRunStart.Size = new System.Drawing.Size(187, 26);
-            this.dateTimePickerRunStart.TabIndex = 3;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(51, 145);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(76, 13);
-            this.label16.TabIndex = 2;
-            this.label16.Text = "Выключиться";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(51, 85);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(68, 13);
-            this.label15.TabIndex = 1;
-            this.label15.Text = "Включиться";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label14.Location = new System.Drawing.Point(50, 35);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(233, 20);
-            this.label14.TabIndex = 0;
-            this.label14.Text = "Установить время забега:";
-            // 
             // panel_contaktBase
             // 
             this.panel_contaktBase.Controls.Add(this.button_saveKMresult);
@@ -886,13 +917,14 @@
             this.panel_contaktBase.Controls.Add(this.groupBox3);
             this.panel_contaktBase.Controls.Add(this.groupBox4);
             this.panel_contaktBase.Enabled = false;
-            this.panel_contaktBase.Location = new System.Drawing.Point(523, 96);
+            this.panel_contaktBase.Location = new System.Drawing.Point(941, 173);
             this.panel_contaktBase.Name = "panel_contaktBase";
             this.panel_contaktBase.Size = new System.Drawing.Size(600, 600);
             this.panel_contaktBase.TabIndex = 4;
             // 
             // button_saveKMresult
             // 
+            this.button_saveKMresult.Enabled = false;
             this.button_saveKMresult.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button_saveKMresult.Location = new System.Drawing.Point(28, 527);
             this.button_saveKMresult.Name = "button_saveKMresult";
@@ -1159,7 +1191,7 @@
             this.panel_settingsTag.Controls.Add(this.label28);
             this.panel_settingsTag.Controls.Add(this.textBoxNameTag);
             this.panel_settingsTag.Controls.Add(this.label29);
-            this.panel_settingsTag.Location = new System.Drawing.Point(737, 382);
+            this.panel_settingsTag.Location = new System.Drawing.Point(685, 406);
             this.panel_settingsTag.Name = "panel_settingsTag";
             this.panel_settingsTag.Size = new System.Drawing.Size(600, 600);
             this.panel_settingsTag.TabIndex = 6;
@@ -1512,33 +1544,24 @@
             // 
             // panel_start
             // 
-            this.panel_start.Location = new System.Drawing.Point(1038, 33);
+            this.panel_start.Location = new System.Drawing.Point(1042, 53);
             this.panel_start.Name = "panel_start";
             this.panel_start.Size = new System.Drawing.Size(351, 277);
             this.panel_start.TabIndex = 7;
-            // 
-            // label_version
-            // 
-            this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(6, 583);
-            this.label_version.Name = "label_version";
-            this.label_version.Size = new System.Drawing.Size(41, 13);
-            this.label_version.TabIndex = 8;
-            this.label_version.Text = "version";
             // 
             // Form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1096, 604);
-            this.Controls.Add(this.panel_resultTag);
             this.Controls.Add(this.panel_start);
-            this.Controls.Add(this.panel_settingsTag);
-            this.Controls.Add(this.panel_contaktBase);
-            this.Controls.Add(this.panel_alarmBase);
-            this.Controls.Add(this.panel_settingsBase);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.panel_settingsBase);
+            this.Controls.Add(this.panel_alarmBase);
+            this.Controls.Add(this.panel_resultTag);
+            this.Controls.Add(this.panel_contaktBase);
+            this.Controls.Add(this.panel_settingsTag);
             this.Name = "Form_main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Настройка баз и меток";
@@ -1551,6 +1574,8 @@
             this.groupBox2.ResumeLayout(false);
             this.panel_buttonTag.ResumeLayout(false);
             this.panel_buttonBase.ResumeLayout(false);
+            this.panel_alarmBase.ResumeLayout(false);
+            this.panel_alarmBase.PerformLayout();
             this.panel_settingsBase.ResumeLayout(false);
             this.panel_settingsBase.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeWaitKM)).EndInit();
@@ -1559,8 +1584,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPowerBleBase)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeoutBase)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNumBase)).EndInit();
-            this.panel_alarmBase.ResumeLayout(false);
-            this.panel_alarmBase.PerformLayout();
             this.panel_contaktBase.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1697,6 +1720,8 @@
         private System.Windows.Forms.Panel panel_start;
         private System.Windows.Forms.Button button_Tag_ReadAllTag;
         private System.Windows.Forms.Label label_version;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
     }
 }
 

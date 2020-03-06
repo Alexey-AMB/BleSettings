@@ -96,7 +96,7 @@ namespace BLE_setup
             MODE_SLEEP
         }
 
-        public enum WORKTYPE : byte
+    public enum WORKTYPE : byte
         {
             TYPE_START,
             TYPE_BASE_MAIN,
@@ -331,17 +331,22 @@ namespace BLE_setup
 
         private static async void Unsubscribe()
         {
-            //if (_subscribers == null) return;
-            foreach (var sub in _subscribers)
+            try
             {
-                try
+                //if (_subscribers == null) return;
+                foreach (var sub in _subscribers)
                 {
-                    await sub.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.None);
-                    sub.ValueChanged -= Characteristic_ValueChanged;
+                    try
+                    {
+                        await sub.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.None);
+                        sub.ValueChanged -= Characteristic_ValueChanged;
+                    }
+                    catch { }
                 }
-                catch { }
+
+                _subscribers.Clear();
             }
-            _subscribers.Clear();
+            catch { }
         }
 
         private static void Characteristic_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)

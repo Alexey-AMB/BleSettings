@@ -35,7 +35,7 @@ namespace BleSettings
     public partial class Form_main : Form
     {
         //========================================================================
-        private const string ver = "2019.11.07";
+        private const string ver = "2019.11.14";
         //========================================================================
         public class BaseWorkType
         {
@@ -138,6 +138,14 @@ namespace BleSettings
         private void DataGridView1_MouseClick(object sender, MouseEventArgs e)
         {
             currSelectedRow = this.dataGridView1.SelectedRows;
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            //if (this.dataGridView1.SelectedRows.Count > 0)
+            //    currSelectedRow = this.dataGridView1.SelectedRows;
+            //else
+            ///    DisableButtons(false);
         }
 
         //========================================================================
@@ -519,7 +527,7 @@ namespace BleSettings
             this.numericUpDownGainKm.Value = sbs.gain_KM;
 
             this.numericUpDownPowerBleBase.Value = sbs.powerble_station;
-            this.numericUpDownTimeoutBase.Value = sbs.timeut_station;
+            this.numericUpDownTimeoutBase.Value = sbs.timeut_station/60;
             this.numericUpDownTimerKm.Value = sbs.timer_KM;
             this.textBoxPasswordBase.Text = Encoding.Default.GetString(sbs.password_station);
 
@@ -632,6 +640,8 @@ namespace BleSettings
                 this.dataGridView2.DataSource = ds;
                 this.dataGridView2.DataMember = "Table1";
                 this.dataGridView2.Refresh();
+
+                this.button_saveKMresult.Enabled = true;
             }
             else
             {
@@ -833,7 +843,7 @@ namespace BleSettings
             returnSettings.gain_KM = (byte)this.numericUpDownGainKm.Value;
             returnSettings.num_station = (byte)this.numericUpDownNumBase.Value;
             returnSettings.powerble_station = (byte)this.numericUpDownPowerBleBase.Value;
-            returnSettings.timeut_station = (UInt32)this.numericUpDownTimeoutBase.Value;
+            returnSettings.timeut_station = (UInt32)this.numericUpDownTimeoutBase.Value * 60;
             returnSettings.timer_KM = (UInt32)this.numericUpDownTimerKm.Value;
             returnSettings.service2 = (byte)this.numericUpDownTimeWaitKM.Value;
             returnSettings.password_station = new byte[10];
@@ -946,7 +956,9 @@ namespace BleSettings
             this.dataGridView2.Rows.Clear();
             this.dataGridView2.Refresh();
 
-            DisableButtons(true);
+            ButtonCommandSend(InCommandBase.CMD_MODE_ACTIVE, null, false);
+
+            //DisableButtons(true);
         }
 
         private void Button_saveKMresult_Click(object sender, EventArgs e)
@@ -1477,6 +1489,8 @@ namespace BleSettings
         }
 
        
+
+
 
         #endregion
         //========================================================================
